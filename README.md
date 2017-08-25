@@ -1,9 +1,9 @@
-HashiCorp Middleman Customizations
-==================================
-A wrapper around [Middleman][] for HashiCorp's customizations.
+# HashiCorp Middleman Customizations
 
-Installation
-------------
+A wrapper around [Middleman][https://middlemanapp.com/] for HashiCorp's customizations.
+
+## Installation
+
 Add this line to the Gemfile:
 
 ```ruby
@@ -17,9 +17,9 @@ $ bundle
 ```
 
 
-Usage
------
-To generate a new site, follow the instructions in the [Middleman docs][]. Then add the following line to your `config.rb`:
+## Usage
+
+To generate a new site, follow the instructions in the [Middleman docs][http://middlemanapp.com/basics/getting-started/]. Then add the following line to your `config.rb`:
 
 ```ruby
 activate :hashicorp
@@ -52,10 +52,11 @@ $ middleman server
 
 and you are off running!
 
-Customizations
---------------
+## Customizations
+
 ### Default Options
-- Syntax highlighting (via [middleman-syntax][]) is automatically enabled
+
+- Syntax highlighting (via [middleman-syntax][https://github.com/middleman/middleman-syntax]) is automatically enabled
 - Asset directories are organized like Rails:
     - `assets/stylesheets`
     - `assets/javascripts`
@@ -67,17 +68,9 @@ Customizations
 - During build, assets are hashed
 - During build, gzipped assets are also created
 
-### IE Compatibility
-
-There are bundled things that make IE behave nicely. Include them like this:
-
-```html
-<!--[if lt IE 9]>
-  <%= javascript_include_tag "ie-compat" %>
-<![endif]-->
-```
-
 ### Inline SVGs
+
+> **Note:** Temporarily out of commission
 
 Getting SVGs out of the asset pipeline and into the DOM can be hard, but not
 with the magic `inline_svg` helper!
@@ -87,86 +80,6 @@ with the magic `inline_svg` helper!
 ```
 
 It supports configuring the class, height, width, and viewbox.
-
-### Turbolinks
-
-Turbolinks highjack links on the same domain and use AJAX to dynamically update
-only the changed content. This is used by many popular sites, including GitHub.
-To enable turbolinks, include the javascript.
-
-```js
-// assets/javascripts/application.js
-//= require turbolinks
-```
-
-### Mobile Sidebar
-
-The mobile sidebar is displayed on mobile and small screens as a hamburger menu.
-It requires some additional markup and css for configuration. First, define the
-following variables in your scss:
-
-```scss
-$sidebar-background-color
-$sidebar-link-color
-$sidebar-font-family
-$sidebar-font-weight
-$sidebar-font-size
-$sidebar-link-color-hover
-```
-
-Then include the scss scaffold:
-
-```scss
-@import 'hashicorp/sidebar';
-```
-
-Next, create some markup like this:
-
-```html
-<div class="sidebar-overlay"></div>
-
-<aside class="sidebar" role="navigation">
-  <div class="sidebar-header">
-    <img src="images/my-image.svg" alt="My Header" height="42">
-  </div>
-
-  <ul class="nav sidebar-nav">
-    <li><a href="/">Home</a></li>
-  </ul>
-
-  <!-- Optional -->
-  <div class="divider"></div>
-
-  <ul class="nav sidebar-nav">
-    <li><a href="/">Other</li>
-  </ul>
-</aside>
-```
-
-Finally include the required javascript:
-
-```js
-//= require hashicorp/sidebar
-```
-
-### Mega Nav
-HashiCorp has a consistent mega-nav used across all project sites. This is insertable into any document using the following:
-
-```erb
-<%= mega_nav :terraform %>
-```
-
-Additionally, you must import the CSS and Javascript:
-
-```js
-// assets/javascripts/application.js
-//= require hashicorp/mega-nav
-```
-
-```scss
-// assets/stylesheets/application.scss
-@import 'hashicorp/mega-nav'
-```
 
 ### Helpers
 - `latest_version` - get the version specified in `config.rb` as `version`, but replicated here for use in views.
@@ -240,58 +153,10 @@ By default, the Markdown spec does not call for rendering markdown recursively i
 </div>
 ```
 
-#### Bootstrap Alerts
-There are 4 custom markdown extensions that automatically create Twitter Bootstrap-style alerts:
+## Contributing
 
-- `=>` => `success`
-- `->` => `info`
-- `~>` => `warning`
-- `!>` => `danger`
-
-```markdown
--> Hey, you should know...
-```
-
-```html
-<div class="alert alert-info" role="alert">
-  <p>Hey, you should know...</p>
-</div>
-```
-
-Of course you can use Markdown inside the block:
-
-```markdown
-!> This is a **really** advanced topic!
-```
-
-```html
-<div class="alert alert-danger" role="alert">
-  <p>This is a <strong>really</strong> advanced topic!</p>
-</div>
-```
-
-### Bootstrap
-Twitter Bootstrap (3.x) is automatically bundled. Simply activate it it in your CSS and Javascript:
-
-```scss
-@import 'bootstrap-sprockets';
-@import 'bootstrap';
-```
-
-```javascript
-//= require jquery
-//= require bootstrap
-```
-
-Contributing
-------------
 1. [Fork it](https://github.com/hashicorp/middleman-hashicorp/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
-
-
-[Middleman]: http://middlemanapp.com/
-[Middleman docs]: http://middlemanapp.com/basics/getting-started/
-[middleman-syntax]: http://github.com/middleman/middleman-syntax/

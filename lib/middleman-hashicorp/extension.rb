@@ -29,35 +29,36 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     app.configure(:build, &syntax)
 
     # Organize assets like Rails
-    app.set :css_dir,    "assets/stylesheets"
-    app.set :js_dir,     "assets/javascripts"
-    app.set :images_dir, "assets/images"
-    app.set :fonts_dir,  "assets/fonts"
+    app.config[:css_dir] = "assets/stylesheets"
+    app.config[:js_dir] = "assets/javascripts"
+    app.config[:images_dir] = "assets/images"
+    app.config[:fonts_dir] = "assets/fonts"
 
     # Make custom assets available
-    assets = Proc.new { sprockets.import_asset "ie-compat.js" }
-    app.configure(:development, &assets)
-    app.configure(:build, &assets)
+    # TODO: fix this, sprockets no longer used
+    # assets = Proc.new { sprockets.import_asset "ie-compat.js" }
+    # app.configure(:development, &assets)
+    # app.configure(:build, &assets)
 
     # Override the default Markdown settings to use our customer renderer
     # and the options we want!
-    app.set :markdown_engine, :redcarpet
-    app.set :markdown, Middleman::HashiCorp::RedcarpetHTML::REDCARPET_OPTIONS.merge(
+    app.config[:markdown_engine] = :redcarpet
+    app.config[:markdown] = Middleman::HashiCorp::RedcarpetHTML::REDCARPET_OPTIONS.merge(
       renderer: Middleman::HashiCorp::RedcarpetHTML
     )
 
     # Do not strip /index.html from directory indexes
-    app.set :strip_index_file, false
+    app.config[:strip_index_file] = false
 
     # Set the latest version
-    app.set :latest_version, options.version
+    app.config[:latest_version] = options.version
 
     # Do the releases dance
-    app.set :product_versions, _self.product_versions
+    app.config[:product_versions] = _self.product_versions
 
-    app.set :github_slug, options.github_slug
-    app.set :website_root, options.website_root
-
+    app.config[:github_slug] = options.github_slug
+    app.config[:website_root] = options.website_root
+    
     # Configure the development-specific environment
     app.configure :development do
       # Reload the browser automatically whenever files change
@@ -93,6 +94,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # @return [String]
     #
     def inline_svg(filename, options = {})
+      # TODO: fix this, sprockets not used in MM4
       asset = sprockets.find_asset(filename)
 
       # If the file wasn't found, embed error SVG
@@ -246,17 +248,6 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
       relative_path = resource.path.match(/.*\//).to_s
       file = resource.source_file.split("/").last
       website_root + "/source/" + relative_path + file
-    end
-
-    #
-    # Inserts the mega navigation to be used across all project sites.
-    # @return [String]
-    #
-    def mega_nav(product, variables = {})
-      variables = variables.dup
-      variables[:product] = product.to_s
-      f = File.expand_path("../partials/_mega.html.erb", __FILE__)
-      render_individual_file(f, variables, { template_body: File.read(f) })
     end
 
     #
