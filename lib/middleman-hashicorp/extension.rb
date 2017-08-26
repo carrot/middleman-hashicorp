@@ -94,8 +94,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # @return [String]
     #
     def inline_svg(filename, options = {})
-      # TODO: fix this, sprockets not used in MM4
-      asset = sprockets.find_asset(filename)
+      asset = File.open(File.join(Middleman::Application.root, "/assets/img/#{filename}"), "rb").read
 
       # If the file wasn't found, embed error SVG
       if asset.nil?
@@ -115,7 +114,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
 
       # If the file was found, parse it, add optional classes, and then embed it
       else
-        file = asset.source.force_encoding("UTF-8")
+        file = asset
         doc = Nokogiri::HTML::DocumentFragment.parse(file)
         svg = doc.at_css("svg")
 
@@ -229,6 +228,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # @return [false] if github_slug hasn't been set
     #
     def github_url(specificity = :repo)
+      # TODO: this is causing a huge error for some reason
       return false if github_slug.nil?
       base_url = "https://github.com/#{github_slug}"
       if specificity == :repo
