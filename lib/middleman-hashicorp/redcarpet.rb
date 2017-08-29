@@ -30,7 +30,7 @@ class Middleman::HashiCorp::RedcarpetHTML < ::Middleman::Renderers::MiddlemanRed
 
     return <<-EOH.gsub(/^ {6}/, "")
       <h#{level} id="#{anchor}">
-        <a name="#{anchor}" class="anchor" href="##{anchor}">&raquo;</a>
+        <a name="#{anchor}" class="anchor" href="##{anchor}"></a>
         #{title}
       </h#{level}>
     EOH
