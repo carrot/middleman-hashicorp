@@ -94,7 +94,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # @return [String]
     #
     def inline_svg(filename, options = {})
-      asset = File.open(File.join(Middleman::Application.root, "/assets/img/#{filename}"), "rb").read
+      asset = File.open(File.join(Middleman::Application.root, "/assets/img/#{filename}"), "r:utf-8").read
 
       # If the file wasn't found, embed error SVG
       if asset.nil?
