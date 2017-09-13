@@ -71,6 +71,9 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
 
     # Configure the build-specific environment
     minify_javascript = options.minify_javascript
+    minify_css = options.minify_css
+    hash_assets = options.hash_assets
+    
     app.configure :build do
       if minify_css
         # Minify CSS on build
