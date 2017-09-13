@@ -10,6 +10,8 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
   option :name, nil, "The name of the package (e.g. 'consul')"
   option :version, nil, "The version of the package (e.g. 0.1.0)"
   option :minify_javascript, true, "Whether to minimize JS or not"
+  option :minify_css, true, "Whether to minimize CSS or not"
+  option :hash_assets, true, "Whether to hash assets or not"
   option :github_slug, nil, "The project's GitHub namespace/project_name duo (e.g. hashicorp/serf)"
   option :website_root, "website", "The project's middleman directory relative to the Git root"
   option :releases_enabled, true, "Whether to fetch releases"
@@ -70,16 +72,21 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # Configure the build-specific environment
     minify_javascript = options.minify_javascript
     app.configure :build do
-      # Minify CSS on build
-      activate :minify_css
+      if minify_css
+        # Minify CSS on build
+        activate :minify_css
+      end
 
       if minify_javascript
         # Minify Javascript on build
         activate :minify_javascript
       end
 
-      # Enable cache buster
-      activate :asset_hash
+      
+      if hash_assets
+        # Enable cache buster
+        activate :asset_hash
+      end
     end
   end
 
