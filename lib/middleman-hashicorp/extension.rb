@@ -61,13 +61,19 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     app.config[:github_slug] = options.github_slug
     app.config[:website_root] = options.website_root
     
+    # !!!
+    # This is making things slower with the component library, commented out
+    # for now
+    # !!!
+    
     # Configure the development-specific environment
-    app.configure :development do
-      # Reload the browser automatically whenever files change
-      require "middleman-livereload"
-      activate :livereload,
-        host: "0.0.0.0"
-    end
+    # app.configure :development do
+    #   # Reload the browser automatically whenever files change
+    #   require "middleman-livereload"
+    #   activate :livereload,
+    #     host: "0.0.0.0",
+    #     ignore: [/img/]
+    # end
 
     # Configure the build-specific environment
     minify_javascript = options.minify_javascript
