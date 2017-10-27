@@ -3,9 +3,15 @@ require "middleman-core/renderers/redcarpet"
 require "nokogiri"
 require "active_support/core_ext/module/attribute_accessors"
 
+require "redcarpet"
+require "rouge"
+require "rouge/plugins/redcarpet"
+
 # Our custom Markdown parser - extends middleman's customer parser so we pick up
 # all the magic.
-class Middleman::HashiCorp::RedcarpetHTML < ::Middleman::Renderers::MiddlemanRedcarpetHTML
+class Middleman::HashiCorp::RedcarpetHTML < ::Redcarpet::Render::HTML
+  include Rouge::Plugins::Redcarpet
+
   # Custom RedCarpet options.
   REDCARPET_OPTIONS = {
     autolink:           true,
@@ -30,7 +36,7 @@ class Middleman::HashiCorp::RedcarpetHTML < ::Middleman::Renderers::MiddlemanRed
 
     return <<-EOH.gsub(/^ {6}/, "")
       <h#{level} id="#{anchor}">
-        <a name="#{anchor}" class="anchor" href="##{anchor}"></a>
+        <a name="#{anchor}" class="anchor" href="##{anchor}">&raquo;</a>
         #{title}
       </h#{level}>
     EOH
@@ -69,7 +75,7 @@ class Middleman::HashiCorp::RedcarpetHTML < ::Middleman::Renderers::MiddlemanRed
 
     if md = raw.match(/\<(.+?)\>(.*)\<(\/.+?)\>/m)
       open_tag, content, close_tag = md.captures
-      "<#{open_tag}>\n#{recursive_render(unindent(content))}<#{close_tag}>"
+      "<#{open_tag}>\n#{recursive_render(content)}<#{close_tag}>"
     else
       raw
     end
