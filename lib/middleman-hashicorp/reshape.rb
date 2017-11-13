@@ -16,7 +16,7 @@ class ReshapeMiddleware
       tempfile = "tmp-#{('a'..'z').to_a.shuffle[0,8].join}"
       File.write(tempfile, @response.body.join(''))
       # run the response body through node, decode from base64
-      @response = [Base64.decode64(`node ./assets/reshape.js < #{tempfile}`.match(/-------- OUTPUT --------\n(.*)\n------------------------/)[1])]
+      @response = [Base64.decode64(`node #{File.dirname(__FILE__)}/reshape/reshape.js < #{tempfile}`.match(/-------- OUTPUT --------\n(.*)\n------------------------/)[1])]
 
       # now we can remove the tempfile
       File.delete(tempfile)
