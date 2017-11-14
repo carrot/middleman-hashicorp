@@ -3,6 +3,7 @@ module Middleman
     require_relative "redcarpet"
     require_relative "releases"
     require_relative "rouge"
+    require_relative "reshape"
   end
 end
 

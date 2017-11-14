@@ -1,0 +1,26 @@
+{
+  "name": "middleman-spike-assets",
+  "description": "simple config to use postcss and webpack for asset processing",
+  "version": "1.0.0",
+  "author": "Jeff Escalante",
+  "dependencies": {
+    "preact": "^8.2.6",
+    "reshape-preact-components": "^0.5.1"
+  },
+  "devDependencies": {
+    "babel-preset-preact": "^1.1.0",
+    "babel-register": "^6.26.0",
+    "node-fetch": "^1.7.3",
+    "nsp": "^2.8.1",
+    "postcss-extend-rule": "^1.1.0",
+    "postcss-object-fit-images": "^1.1.2",
+    "spike": "^2.2.1",
+    "spike-css-standards": "^3.0.0",
+    "spike-js-standards": "^2.0.2",
+    "webpack-bundle-analyzer": "^2.9.0"
+  },
+  "scripts": {
+    "check": "nsp check"
+  },
+  "main": "app.js"
+}

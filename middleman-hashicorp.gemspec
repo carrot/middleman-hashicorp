@@ -1,6 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+`cd #{File.dirname(__FILE__)}/lib/middleman-hashicorp/reshape && npm i`
+puts 'post_install called for carrot/middleman-hashicorp'
+
 require 'middleman-hashicorp/version'
 
 Gem::Specification.new do |spec|
@@ -24,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'middleman',            '~> 4.2'
   spec.add_dependency 'middleman-livereload', '~> 3.4'
   spec.add_dependency 'middleman-syntax',     '~> 3.0'
-  
+
   # Rails
   spec.add_dependency 'nokogiri',      '~> 1.8'
   spec.add_dependency 'activesupport', '~> 5.0'
