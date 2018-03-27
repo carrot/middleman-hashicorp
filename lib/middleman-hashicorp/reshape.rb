@@ -27,7 +27,7 @@ class ReshapeMiddleware
       # ok let's return the modified response now
       puts "processed '#{path}' with reshape"
       puts $?
-      return [200, {}, @response]
+      return [200, {'Content-Type'=> 'text/html'}, @response]
     else
       return [@status, @headers, @response]
     end
