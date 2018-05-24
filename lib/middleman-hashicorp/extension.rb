@@ -101,6 +101,46 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
   end
 
   helpers do
+    # Markdown render helper function
+    def md(text)
+      Redcarpet::Markdown.new(Middleman::HashiCorp::RedcarpetHTML, Middleman::HashiCorp::RedcarpetHTML::REDCARPET_OPTIONS).render(text)
+    end
+  
+    # Get the title for the page.
+    def title_for(page)
+      if page && page.data.page_title
+        return "#{page.data.page_title} - HashiCorp"
+      end
+      "HashiCorp"
+    end
+  
+    # Get the description for the page
+    def description_for(page)
+      description = (page.data.description || page.metadata[:description] || "")
+        .gsub('"', '')
+        .gsub(/\n+/, ' ')
+        .squeeze(' ')
+  
+      return escape_html(description)
+    end
+  
+    # Returns the id for this page.
+    def body_id_for(page)
+      if page.url == "/" || page.url == "/index.html"
+        return "p-home"
+      end
+      if !(title = page.data.page_title || page.metadata[:title]).blank?
+        return "p-" + title
+          .downcase
+          .gsub('"', '')
+          .gsub(/[^\w]+/, '-')
+          .gsub(/_+/, '-')
+          .squeeze('-')
+          .squeeze(' ')
+      end
+      return ""
+    end
+
     #
     # Generate an inline svg from the given asset name.
     #
