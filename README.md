@@ -1,13 +1,13 @@
 # HashiCorp Middleman Customizations
 
-A wrapper around [Middleman][https://middlemanapp.com/] for HashiCorp's customizations.
+A wrapper around [Middleman](https://middlemanapp.com/) for HashiCorp's customizations.
 
 ## Installation
 
 Add this line to the Gemfile:
 
 ```ruby
-gem 'middleman-hashicorp', github: 'hashicorp/middleman-hashicorp'
+gem 'middleman-hashicorp', git: 'https://github.com/carrot/middleman-hashicorp'
 ```
 
 And then run:
@@ -16,10 +16,9 @@ And then run:
 $ bundle
 ```
 
-
 ## Usage
 
-To generate a new site, follow the instructions in the [Middleman docs][http://middlemanapp.com/basics/getting-started/]. Then add the following line to your `config.rb`:
+To generate a new site, follow the instructions in the [Middleman docs](http://middlemanapp.com/basics/getting-started/). Then add the following line to your `config.rb`:
 
 ```ruby
 activate :hashicorp
@@ -56,17 +55,17 @@ and you are off running!
 
 ### Default Options
 
-- Syntax highlighting (via [middleman-syntax][https://github.com/middleman/middleman-syntax]) is automatically enabled
-- Asset directories are organized like Rails:
-    - `assets/stylesheets`
-    - `assets/javascripts`
-    - `assets/images`
-    - `assets/fonts`
-- The Markdown engine is redcarpet (see the section below on Markdown customizations)
-- During development, live-reload is automatically enabled
-- During build, css, javascript and HTML are minified
-- During build, assets are hashed
-- During build, gzipped assets are also created
+* Syntax highlighting (via [middleman-syntax](https://github.com/middleman/middleman-syntax) is automatically enabled
+* Asset directories are organized like Rails:
+  * `assets/stylesheets`
+  * `assets/javascripts`
+  * `assets/images`
+  * `assets/fonts`
+* The Markdown engine is redcarpet (see the section below on Markdown customizations)
+* During development, live-reload is automatically enabled
+* During build, css, javascript and HTML are minified
+* During build, assets are hashed
+* During build, gzipped assets are also created
 
 ### Inline SVGs
 
@@ -82,47 +81,50 @@ with the magic `inline_svg` helper!
 It supports configuring the class, height, width, and viewbox.
 
 ### Helpers
-- `latest_version` - get the version specified in `config.rb` as `version`, but replicated here for use in views.
 
-    ```ruby
-    latest_version #=> "1.0.0"
-    ```
+* `latest_version` - get the version specified in `config.rb` as `version`, but replicated here for use in views.
 
-- `system_icon` - use vendored image assets for a system icon
+  ```ruby
+  latest_version #=> "1.0.0"
+  ```
 
-    ```ruby
-    system_icon(:windows) #=> "<img src=\"/images/icons/....png\">"
-    ```
+* `system_icon` - use vendored image assets for a system icon
 
-- `pretty_os` - get the human name of the given operating system
+  ```ruby
+  system_icon(:windows) #=> "<img src=\"/images/icons/....png\">"
+  ```
 
-    ```ruby
-    pretty_os(:darwin) => "Mac OS X"
-    ```
+* `pretty_os` - get the human name of the given operating system
 
-- `pretty_arch` - get the arch out of an arch
+  ```ruby
+  pretty_os(:darwin) => "Mac OS X"
+  ```
 
-    ```ruby
-    pretty_arch(:amd64) #=> "64-bit"
-    ```
+* `pretty_arch` - get the arch out of an arch
+
+  ```ruby
+  pretty_arch(:amd64) #=> "64-bit"
+  ```
 
 ### Markdown
+
 This extension extends the redcarpet markdown processor to add some additional features:
 
-- Autolinking of URLs
-- Fenced code blocks
-- Tables
-- TOC data
-- Strikethrough
-- Superscript
+* Autolinking of URLs
+* Fenced code blocks
+* Tables
+* TOC data
+* Strikethrough
+* Superscript
 
 In addition to "standard markdown", the custom markdown parser supports the following:
 
 #### Auto-linking Anchor Tags
+
 Since the majority of HashiCorp's projects use the following syntax to define APIs, this extension automatically converts those to named anchor links:
 
 ```markdown
-- `api_method` - description
+* `api_method` - description
 ```
 
 Outputs:
@@ -139,12 +141,13 @@ Header links will automatically generate linkable hrefs on hover. This can be us
 
 ```scss
 // assets/stylesheets/application.scss
-@import 'hashicorp/anchor-links'
+@import 'hashicorp/anchor-links';
 ```
 
 Any special characters are converted to an underscore (`_`).
 
 #### Recursive Markdown Rendering
+
 By default, the Markdown spec does not call for rendering markdown recursively inside of HTML. With this extension, it is valid:
 
 ```markdown
@@ -155,8 +158,8 @@ By default, the Markdown spec does not call for rendering markdown recursively i
 
 ## Contributing
 
-1. [Fork it](https://github.com/hashicorp/middleman-hashicorp/fork)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+1.  [Fork it](https://github.com/hashicorp/middleman-hashicorp/fork)
+2.  Create your feature branch (`git checkout -b my-new-feature`)
+3.  Commit your changes (`git commit -am 'Add some feature'`)
+4.  Push to the branch (`git push origin my-new-feature`)
+5.  Create a new Pull Request
