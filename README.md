@@ -36,8 +36,15 @@ activate :hashicorp do |h|
   # or local development.
   h.releases_enabled = false
 
-  # Disable some extensions
-  h.minify_javascript = false
+  # Optional (shown with defaults)
+  # h.minify_javascript = false
+  # h.minify_css = false
+  # h.hash_assets = false
+  # h.reshape_component_file = 'assets/reshape.js'
+  # h.reshape_asset_root = 'assets'
+  # h.reshape_source_path = 'public'
+  # h.datocms_api_key = nil
+  # h.segment_production_key = '0EXTgkNx0Ydje2PGXVbRhpKKoe5wtzcE' #HahiCorp staging key
 end
 ```
 
@@ -62,10 +69,10 @@ and you are off running!
   * `assets/images`
   * `assets/fonts`
 * The Markdown engine is redcarpet (see the section below on Markdown customizations)
-* During development, live-reload is automatically enabled
-* During build, css, javascript and HTML are minified
-* During build, assets are hashed
-* During build, gzipped assets are also created
+* Reshape defaults:
+  * Asset root: `'assets'`
+  * Asset source root: `'public'`
+  * Component file: `'assets/reshape.js'`
 
 ### Inline SVGs
 
