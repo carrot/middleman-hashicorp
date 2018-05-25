@@ -10,12 +10,17 @@ end
 class Middleman::HashiCorpExtension < ::Middleman::Extension
   option :name, nil, "The name of the package (e.g. 'consul')"
   option :version, nil, "The version of the package (e.g. 0.1.0)"
-  option :minify_javascript, true, "Whether to minimize JS or not"
-  option :minify_css, true, "Whether to minimize CSS or not"
-  option :hash_assets, true, "Whether to hash assets or not"
+  option :minify_javascript, false, "Whether to minimize JS or not"
+  option :minify_css, false, "Whether to minimize CSS or not"
+  option :hash_assets, false, "Whether to hash assets or not"
   option :github_slug, nil, "The project's GitHub namespace/project_name duo (e.g. hashicorp/serf)"
   option :website_root, "website", "The project's middleman directory relative to the Git root"
   option :releases_enabled, true, "Whether to fetch releases"
+  option :reshape_component_file, 'assets/reshape.js', "Path to reshape component import file"
+  option :reshape_asset_root, 'assets', "Root for CSS, JS and other assets"
+  option :reshape_source_path, 'public', "Folder where compiled assets are available"
+  option :datocms_api_key, nil, "API key for DatoCMS, if present activates Dato"
+  option :segment_production_key, '0EXTgkNx0Ydje2PGXVbRhpKKoe5wtzcE', "Production API key for segment analytics"
 
   def initialize(app, options_hash = {}, &block)
     super
@@ -30,6 +35,13 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     syntax = Proc.new { activate :syntax }
     app.configure(:development, &syntax)
     app.configure(:build, &syntax)
+
+    if (options.datocms_api_key)
+      require "middleman-dato"
+      app.activate :dato,
+        token: options.datocms_api_key,
+        preview: ENV['ENV'] != 'production'
+    end
 
     # Organize assets like Rails
     app.config[:css_dir] = "assets/stylesheets"
@@ -61,6 +73,11 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
 
     app.config[:github_slug] = options.github_slug
     app.config[:website_root] = options.website_root
+
+    app.config[:reshape_component_file] = options.reshape_component_file
+    app.config[:reshape_asset_root] = options.reshape_asset_root
+    app.config[:reshape_source_path] = options.reshape_source_path
+    app.config[:datocms_api_key] = options.datocms_api_key
     
     # !!!
     # This is making things slower with the component library, commented out
@@ -82,6 +99,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     hash_assets = options.hash_assets
     
     app.configure :build do
+
       if minify_css
         # Minify CSS on build
         activate :minify_css
@@ -91,7 +109,6 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
         # Minify Javascript on build
         activate :minify_javascript
       end
-
       
       if hash_assets
         # Enable cache buster
@@ -100,7 +117,45 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     end
   end
 
+  expose_to_template :segmentId
+
+  # If a production Segment ID is provided, use it, otherwise use staging by default
+  def segmentId()
+    options.segment_production_key
+  end
+
+  def after_configuration    
+    # Middleware for rendering preact components
+    @app.use ReshapeMiddleware, component_file: options.reshape_component_file
+
+    # compile js with webpack, css with postcss
+    @app.activate :external_pipeline,
+      name: options.reshape_asset_root,
+      command: "cd assets && NODE_ENV=#{ENV['ENV'] || 'development'}  ./node_modules/.bin/spike #{@app.build? ? :compile : :watch}",
+      source: "#{options.reshape_asset_root}/#{options.reshape_source_path}"
+  end
+
   helpers do
+    # Encodes dato data as unicode-escaped, base64'd JSON for compatibility with
+    # reshape components.
+    def encode(data)
+      # convert from dato classes into json
+      res = data.is_a?(Array) ? "[#{data.map { |d| d.to_hash.to_json }.join(',')}]" : data.to_hash.to_json
+      # apply escaping for unicode chars
+      res = URI.escape(res, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+        .gsub(/%([0-9A-F]{2})/) { |m| "0x#{$1}".hex.chr(Encoding::UTF_8) }
+      # encode to base64
+      Base64.encode64(res).gsub(/\n/, '')
+    end
+
+    # strip meta descriptions from dato_meta string
+    def strip_meta_desc(tags_string)
+      splt = '<meta '
+      tags_string.split(splt).select! {|t|
+        !(/^(property|name)="(twitter:|og:|)description"/ =~ t )
+      }.join(splt)
+    end
+
     # Markdown render helper function
     def md(text)
       Redcarpet::Markdown.new(Middleman::HashiCorp::RedcarpetHTML, Middleman::HashiCorp::RedcarpetHTML::REDCARPET_OPTIONS).render(text)

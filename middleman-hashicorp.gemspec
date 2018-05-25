@@ -29,6 +29,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'middleman-livereload', '~> 3.4'
   spec.add_dependency 'middleman-syntax',     '~> 3.0'
 
+  # Dato
+  spec.add_dependency 'middleman-dato'
+
   # Rails
   spec.add_dependency 'nokogiri',      '~> 1.8'
   spec.add_dependency 'activesupport', '~> 5.0'
