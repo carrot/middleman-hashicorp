@@ -148,12 +148,40 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
       Base64.encode64(res).gsub(/\n/, '')
     end
 
-    # strip meta descriptions from dato_meta string
-    def strip_meta_desc(tags_string)
-      splt = '<meta '
-      tags_string.split(splt).select! {|t|
-        !(/^(property|name)="(twitter:|og:|)description"/ =~ t )
-      }.join(splt)
+    # Replace dato meta tags with custom overrides
+    # Works for <meta> and <title> tags only.
+    # Overrides is a hash of tags and values to override
+    # e.g
+    # {
+    #   "description" => "this is the description content",
+    #   "og:title" => "this is the title content"
+    # }
+    # Page is the current dato object (page, post etc.)
+    def custom_meta_tags(overrides, page)
+      dato_tags = dato_meta_tags(page)
+      # If <title> is provided as an override, replace 
+      if overrides.keys.include?("title")
+        dato_tags.sub!(/<title>(.*?)<\/title>/, "<title>#{overrides['title']}</title>")
+      end
+      split_by = '<meta '
+
+      # step through each dato-generated meta tag
+      new_tags = dato_tags.split(split_by).inject([]) do |acc, tag|
+        # get the tag's name/property value
+        name = tag.match(/^(?:property|name)="(.*?)"/)
+        # if the tag's name matches one of the override names, replace it
+        if (name && overrides.keys.include?(name[1]))
+          tag_type = name.to_s.include?('og:') ? 'property' : 'name'
+          acc.push("#{tag_type}=\"#{name[1]}\" content=\"#{overrides[name[1]]}\" />")
+        else
+          # otherwise, leave the tag as-is
+          acc.push(tag)
+        end
+        # and return the accumulator
+        acc
+      end
+
+      new_tags.join(split_by)
     end
 
     # Markdown render helper function
