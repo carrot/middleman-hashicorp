@@ -44,7 +44,6 @@ activate :hashicorp do |h|
   # h.reshape_asset_root = 'assets'
   # h.reshape_source_path = 'public'
   # h.datocms_api_key = nil
-  # h.segment_production_key = '0EXTgkNx0Ydje2PGXVbRhpKKoe5wtzcE' #HahiCorp staging key
 end
 ```
 
@@ -62,17 +61,17 @@ and you are off running!
 
 ### Default Options
 
-* Syntax highlighting (via [middleman-syntax](https://github.com/middleman/middleman-syntax) is automatically enabled
-* Asset directories are organized like Rails:
-  * `assets/stylesheets`
-  * `assets/javascripts`
-  * `assets/images`
-  * `assets/fonts`
-* The Markdown engine is redcarpet (see the section below on Markdown customizations)
-* Reshape defaults:
-  * Asset root: `'assets'`
-  * Asset source root: `'public'`
-  * Component file: `'assets/reshape.js'`
+- Syntax highlighting (via [middleman-syntax](https://github.com/middleman/middleman-syntax) is automatically enabled
+- Asset directories are organized like Rails:
+  - `assets/stylesheets`
+  - `assets/javascripts`
+  - `assets/images`
+  - `assets/fonts`
+- The Markdown engine is redcarpet (see the section below on Markdown customizations)
+- Reshape defaults:
+  - Asset root: `'assets'`
+  - Asset source root: `'public'`
+  - Component file: `'assets/reshape.js'`
 
 ### Inline SVGs
 
@@ -89,25 +88,25 @@ It supports configuring the class, height, width, and viewbox.
 
 ### Helpers
 
-* `latest_version` - get the version specified in `config.rb` as `version`, but replicated here for use in views.
+- `latest_version` - get the version specified in `config.rb` as `version`, but replicated here for use in views.
 
   ```ruby
   latest_version #=> "1.0.0"
   ```
 
-* `system_icon` - use vendored image assets for a system icon
+- `system_icon` - use vendored image assets for a system icon
 
   ```ruby
   system_icon(:windows) #=> "<img src=\"/images/icons/....png\">"
   ```
 
-* `pretty_os` - get the human name of the given operating system
+- `pretty_os` - get the human name of the given operating system
 
   ```ruby
   pretty_os(:darwin) => "Mac OS X"
   ```
 
-* `pretty_arch` - get the arch out of an arch
+- `pretty_arch` - get the arch out of an arch
 
   ```ruby
   pretty_arch(:amd64) #=> "64-bit"
@@ -117,12 +116,12 @@ It supports configuring the class, height, width, and viewbox.
 
 This extension extends the redcarpet markdown processor to add some additional features:
 
-* Autolinking of URLs
-* Fenced code blocks
-* Tables
-* TOC data
-* Strikethrough
-* Superscript
+- Autolinking of URLs
+- Fenced code blocks
+- Tables
+- TOC data
+- Strikethrough
+- Superscript
 
 In addition to "standard markdown", the custom markdown parser supports the following:
 
@@ -131,7 +130,7 @@ In addition to "standard markdown", the custom markdown parser supports the foll
 Since the majority of HashiCorp's projects use the following syntax to define APIs, this extension automatically converts those to named anchor links:
 
 ```markdown
-* `api_method` - description
+- `api_method` - description
 ```
 
 Outputs:

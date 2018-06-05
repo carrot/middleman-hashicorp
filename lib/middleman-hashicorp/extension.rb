@@ -20,7 +20,6 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
   option :reshape_asset_root, 'assets', "Root for CSS, JS and other assets"
   option :reshape_source_path, 'public', "Folder where compiled assets are available"
   option :datocms_api_key, nil, "API key for DatoCMS, if present activates Dato"
-  option :segment_production_key, '0EXTgkNx0Ydje2PGXVbRhpKKoe5wtzcE', "Production API key for segment analytics"
 
   def initialize(app, options_hash = {}, &block)
     super
@@ -115,13 +114,6 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
         activate :asset_hash
       end
     end
-  end
-
-  expose_to_template :segmentId
-
-  # If a production Segment ID is provided, use it, otherwise use staging by default
-  def segmentId()
-    options.segment_production_key
   end
 
   def after_configuration    
