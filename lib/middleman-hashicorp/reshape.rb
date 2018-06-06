@@ -6,7 +6,13 @@ class ReshapeMiddleware
     @options = options
   end
 
+  def time_diff_milli(start, finish)
+     ((finish - start) * 1000.0).round(2)
+  end
+
   def call(env)
+    start_time = Time.now
+
     @status, @headers, @response = @app.call(env)
     path = env['PATH_INFO']
     raw_path = /\/[a-zA-Z\-_\/]*?[^.]*$/.match(env['PATH_INFO'])
@@ -24,8 +30,11 @@ class ReshapeMiddleware
       # now we can remove the tempfile
       File.delete(tempfile)
 
+      # stat timing
+      end_time = Time.now
+
       # ok let's return the modified response now
-      puts "processed '#{path}' with reshape"
+      puts "processed '#{path}' with reshape (took #{time_diff_milli start_time, end_time}ms)"
       puts $?
       return [200, {'Content-Type'=> 'text/html'}, @response]
     else
