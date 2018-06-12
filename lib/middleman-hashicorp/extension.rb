@@ -24,6 +24,8 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
   def initialize(app, options_hash = {}, &block)
     super
 
+    return if app.mode?(:config)
+
     # Grab a reference to self so we can access it deep inside blocks
     _self = self
 
