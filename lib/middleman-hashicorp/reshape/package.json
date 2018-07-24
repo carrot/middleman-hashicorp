@@ -1,23 +1,13 @@
 {
-  "name": "middleman-spike-assets",
-  "description": "simple config to use postcss and webpack for asset processing",
+  "name": "middleman-reshape-extension",
+  "description": "an extension that uses reshape to compile middleman views",
   "version": "1.0.0",
   "author": "Jeff Escalante",
   "dependencies": {
-    "preact": "^8.2.9",
-    "reshape-preact-components": "^0.6.0"
-  },
-  "devDependencies": {
     "babel-preset-preact": "^1.1.0",
-    "babel-register": "^6.26.0",
-    "node-fetch": "^2.1.2",
-    "nsp": "^3.2.1",
-    "postcss-extend-rule": "^1.1.0",
-    "postcss-object-fit-images": "^1.1.2",
-    "spike": "^2.2.1",
-    "spike-css-standards": "^4.0.0",
-    "spike-js-standards": "^2.0.2",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "babel-register": "6.26.0",
+    "reshape": "^1.0.0",
+    "reshape-preact-components": "^0.6.0"
   },
   "scripts": {
     "check": "nsp check"
