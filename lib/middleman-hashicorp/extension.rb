@@ -79,12 +79,12 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     app.config[:reshape_asset_root] = options.reshape_asset_root
     app.config[:reshape_source_path] = options.reshape_source_path
     app.config[:datocms_api_key] = options.datocms_api_key
-    
+
     # !!!
     # This is making things slower with the component library, commented out
     # for now
     # !!!
-    
+
     # Configure the development-specific environment
     # app.configure :development do
     #   # Reload the browser automatically whenever files change
@@ -98,7 +98,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     minify_javascript = options.minify_javascript
     minify_css = options.minify_css
     hash_assets = options.hash_assets
-    
+
     app.configure :build do
 
       if minify_css
@@ -110,7 +110,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
         # Minify Javascript on build
         activate :minify_javascript
       end
-      
+
       if hash_assets
         # Enable cache buster
         activate :asset_hash
@@ -118,7 +118,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     end
   end
 
-  def after_configuration    
+  def after_configuration
     # Middleware for rendering preact components
     @app.use ReshapeMiddleware, component_file: options.reshape_component_file
 
@@ -153,7 +153,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # Page is the current dato object (page, post etc.)
     def custom_meta_tags(overrides, page)
       dato_tags = dato_meta_tags(page)
-      # If <title> is provided as an override, replace 
+      # If <title> is provided as an override, replace
       if overrides.keys.include?("title")
         dato_tags.sub!(/<title>(.*?)<\/title>/, "<title>#{overrides['title']}</title>")
       end
@@ -182,7 +182,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     def md(text)
       Redcarpet::Markdown.new(Middleman::HashiCorp::RedcarpetHTML, Middleman::HashiCorp::RedcarpetHTML::REDCARPET_OPTIONS).render(text)
     end
-  
+
     # Get the title for the page.
     def title_for(page)
       if page && page.data.page_title
@@ -190,17 +190,17 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
       end
       "HashiCorp"
     end
-  
+
     # Get the description for the page
     def description_for(page)
       description = (page.data.description || page.metadata[:description] || "")
         .gsub('"', '')
         .gsub(/\n+/, ' ')
         .squeeze(' ')
-  
+
       return escape_html(description)
     end
-  
+
     # Returns the id for this page.
     def body_id_for(page)
       if page.url == "/" || page.url == "/index.html"
@@ -382,18 +382,6 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
       relative_path = resource.path.match(/.*\//).to_s
       file = resource.source_file.split("/").last
       website_root + "/source/" + relative_path + file
-    end
-
-    #
-    # Inserts the enterprise alert to be used across all project sites.
-    # @return [String]
-    #
-    def enterprise_alert(product, variables = {})
-      variables = variables.merge(
-        product: product.to_s,
-      )
-      f = File.expand_path("../partials/_enterprise-alert.html.erb", __FILE__)
-      render_individual_file(f, variables, { template_body: File.read(f) })
     end
   end
 
