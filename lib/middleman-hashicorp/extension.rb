@@ -4,6 +4,7 @@ module Middleman
     require_relative "releases"
     require_relative "rouge"
     require_relative "reshape"
+    require_relative "cgi"
   end
 end
 
@@ -168,7 +169,7 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
         # if the tag's name matches one of the override names, replace it
         if (name && overrides.keys.include?(name[1]))
           tag_type = name.to_s.include?('og:') ? 'property' : 'name'
-          acc.push("#{tag_type}=\"#{name[1]}\" content=\"#{overrides[name[1]]}\" />")
+          acc.push("#{tag_type}=\"#{CGI::escapeHTML(name[1])}\" content=\"#{CGI::escapeHTML(overrides[name[1]])}\" />")
         else
           # otherwise, leave the tag as-is
           acc.push(tag)
