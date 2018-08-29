@@ -134,7 +134,9 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
     # reshape components.
     def encode(data)
       # convert from dato classes into json
-      res = data.is_a?(Array) ? "[#{data.map { |d| d.to_hash.to_json }.join(',')}]" : data.to_hash.to_json
+      res = data.is_a?(Array) ? "[#{data.map { |d|
+        d.is_a?(String) ? d.to_json : d.to_hash.to_json
+      }.join(',')}]" : data.to_hash.to_json
       # apply escaping for unicode chars
       res = URI.escape(res, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
         .gsub(/%([0-9A-F]{2})/) { |m| "0x#{$1}".hex.chr(Encoding::UTF_8) }
