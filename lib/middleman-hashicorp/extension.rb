@@ -4,7 +4,7 @@ module Middleman
     require_relative "releases"
     require_relative "rouge"
     require_relative "reshape"
-    require_relative "cgi"
+    require "cgi"
   end
 end
 
