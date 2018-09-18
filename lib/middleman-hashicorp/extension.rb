@@ -132,12 +132,18 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
 
   helpers do
     # Encodes dato data as unicode-escaped, base64'd JSON for compatibility with
-    # reshape components.
+    # reshape components. Handles arrays, strings, and hashes only right now.
     def encode(data)
       # convert from dato classes into json
-      res = data.is_a?(Array) ? "[#{data.map { |d|
-        d.is_a?(String) ? d.to_json : d.to_hash.to_json
-      }.join(',')}]" : data.to_hash.to_json
+      if data.is_a?(Array)
+        res = "[#{data.map { |d|
+          d.is_a?(String) ? d.to_json : d.to_hash.to_json
+        }.join(',')}]"
+      elsif data.is_a?(String)
+        res = data.to_json
+      else
+        res = data.to_hash.to_json
+      end
       # apply escaping for unicode chars
       res = URI.escape(res, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
         .gsub(/%([0-9A-F]{2})/) { |m| "0x#{$1}".hex.chr(Encoding::UTF_8) }
