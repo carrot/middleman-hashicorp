@@ -392,6 +392,13 @@ class Middleman::HashiCorpExtension < ::Middleman::Extension
       file = resource.source_file.split("/").last
       website_root + "/source/" + relative_path + file
     end
+
+    #
+    # Query the API to get the latest version of a given terraform provider
+    #
+    def latest_provider_version(name)
+      Middleman::HashiCorp::Releases.fetch_latest_version("terraform-provider-#{name}")[:version]
+    end
   end
 
   #

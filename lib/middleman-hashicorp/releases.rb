@@ -29,4 +29,21 @@ class Middleman::HashiCorp::Releases
       end
     end
   end
+
+  #
+  # Gets only the most recently released version data for a given product
+  #
+  def self.fetch_latest_version(product)
+    url = "#{RELEASES_URL}/#{product}/index.json"
+    res = JSON.parse(open(url).read,
+      create_additions: false,
+      symbolize_names: true,
+    )
+    versions = res[:versions]
+
+    # Releases are formatted as an object rather than an array in the JSON
+    # structure, so we need to convert to an array then sort by version to
+    # get the latest. We then return all info for that version.
+    versions[versions.keys.sort_by(&Gem::Version.method(:new)).last]
+  end
 end
